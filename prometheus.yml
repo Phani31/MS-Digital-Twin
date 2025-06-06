@@ -1,0 +1,37 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: 'digital-twin-backend'
+    static_configs:
+      - targets: ['backend:8000']
+    metrics_path: '/metrics'
+    scheme: 'http'
+
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+rule_files:
+  - 'alert.rules'
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - 'alertmanager:9093'  # Uncomment when adding alert manager
+
+# Alert rules
+# alerts:
+#   groups:
+#     - name: digital-twin-alerts
+#       rules:
+#         - alert: HighLatency
+#           expr: digital_twin_query_latency_seconds > 5
+#           for: 5m
+#           labels:
+#             severity: warning
+#           annotations:
+#             summary: High query latency
+#             description: Query latency is above 5 seconds 
